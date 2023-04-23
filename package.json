@@ -14,6 +14,7 @@
     "@hilla/generator-typescript-plugin-push": "2.0.4",
     "@hilla/generator-typescript-utils": "2.0.4",
     "@hilla/react-components": "2.0.2",
+    "@hookform/resolvers": "^3.1.0",
     "@polymer/polymer": "3.5.1",
     "@vaadin-component-factory/vcf-nav": "1.1.0",
     "@vaadin/bundles": "24.0.2",
@@ -31,7 +32,9 @@
     "lit": "2.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.2"
+    "react-hook-form": "^7.43.9",
+    "react-router-dom": "^6.4.2",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@lit-labs/react": "^1.1.0",
@@ -82,7 +85,10 @@
     "@vaadin/vaadin-lumo-styles": "$@vaadin/vaadin-lumo-styles",
     "@hilla/generator-typescript-plugin-backbone": "$@hilla/generator-typescript-plugin-backbone",
     "@vaadin/vaadin-material-styles": "$@vaadin/vaadin-material-styles",
-    "@hilla/generator-typescript-cli": "$@hilla/generator-typescript-cli"
+    "@hilla/generator-typescript-cli": "$@hilla/generator-typescript-cli",
+    "@hookform/resolvers": "$@hookform/resolvers",
+    "react-hook-form": "$react-hook-form",
+    "yup": "$yup"
   },
   "vaadin": {
     "dependencies": {
@@ -127,6 +133,6 @@
       "workbox-core": "6.5.4",
       "workbox-precaching": "6.5.4"
     },
-    "hash": "6d2b7311a005919dc3c4a139f58684006d56a053fb35de2d0394bbe204e2e6c0"
+    "hash": "ffea780b97ab6369cb16a6c91c44c461be1998ad8c196ef1304ee08402c57b14"
   }
 }
