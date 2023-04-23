@@ -1,7 +1,47 @@
-# Custom project from Hilla
+# Hilla + React Hook Form
 
-This project can be used as a starting point to create your own Hilla application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+This project is a POC of integration between Hilla and React Hook Form.
+
+## Features
+
+- Custom server-side validator
+- Simulate generation of a Yup Schema (a static file which matches what would be generated if we implement that)
+- A customized `useForm` hook, which can be used in place of the one by React Hook Form and simplifies using Vaadin components in forms
+- Propagate server-side error messages to components
+- Checkbox wrapper that supports validation
+
+This is how the form looks:
+
+```tsx
+const { register, handleSubmit, formState: { isValid } } = useForm(
+  RegistrationInfoSchema,
+  RegistrationEndpoint.handle,
+  (message) => Notification.show(message, { theme: 'success' }),
+  (error) => Notification.show(error.message || 'Server error', { theme: 'error' }),
+);
+
+return (
+  <VerticalLayout className='p-m'>
+    <HorizontalLayout theme="spacing padding">
+      <TextField label="Name" required {...register("name")} />
+      <TextField label="Email" required {...register("email")} />
+    </HorizontalLayout>
+
+    <HorizontalLayout theme="spacing padding">
+      <TextField label="Phone" {...register("phone")} />
+      <Select label="Country" items={countries} required {...register("country")} />
+    </HorizontalLayout>
+
+    <HorizontalLayout theme="spacing padding">
+      <ValidatedCheckbox label="I agree to the terms and conditions" {...register("terms")} />
+    </HorizontalLayout>
+
+    <HorizontalLayout theme="spacing padding">
+      <Button theme="primary" onClick={handleSubmit} disabled={!isValid}>Register</Button>
+    </HorizontalLayout>
+  </VerticalLayout>
+);
+```
 
 ## Running the application
 
