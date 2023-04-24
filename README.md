@@ -10,37 +10,24 @@ This project is a POC of integration between Hilla and React Hook Form.
 - Propagate server-side error messages to components
 - Checkbox wrapper that supports validation, which is also an example of how Vaadin Components can be wrapped to work with React Hook Form
 
-This is how the form looks:
+This is how the form looks, assuming that we can avoid adding the `required` attribute manually and get it from Yup:
 
 ```tsx
-const { register, handleSubmit, formState: { isValid } } = useForm(
-  RegistrationInfoSchema,
-  RegistrationEndpoint.handle,
-  (message) => Notification.show(message, { theme: 'success' }),
-  (error) => Notification.show(error.message || 'Server error', { theme: 'error' }),
+const { register, handleSubmit } = useForm(
+  RegistrationInfoSchema, // generated
+  RegistrationEndpoint.handle, // generated
+  handleSuccessFromServer, // a function to handle endpoint outcome
+  handleErrorFromServer, // a function to handle errors other than validation
 );
 
 return (
   <VerticalLayout className='p-m'>
-    <HorizontalLayout theme="spacing padding">
-      {/* It should be possible to add "required" to the list of parameters set by "register",
-          if Yup can pass the information. */}
-      <TextField label="Name" required {...register("name")} />
-      <TextField label="Email" required {...register("email")} />
-    </HorizontalLayout>
-
-    <HorizontalLayout theme="spacing padding">
-      <TextField label="Phone" {...register("phone")} />
-      <Select label="Country" items={countries} required {...register("country")} />
-    </HorizontalLayout>
-
-    <HorizontalLayout theme="spacing padding">
-      <ValidatedCheckbox label="I agree to the terms and conditions" {...register("terms")} />
-    </HorizontalLayout>
-
-    <HorizontalLayout theme="spacing padding">
-      <Button theme="primary" onClick={handleSubmit} disabled={!isValid}>Register</Button>
-    </HorizontalLayout>
+    <TextField label="Name" {...register("name")} />
+    <TextField label="Email" {...register("email")} />
+    <TextField label="Phone" {...register("phone")} />
+    <Select label="Country" items={countries} {...register("country")} />
+    <ValidatedCheckbox label="I agree to the terms and conditions" {...register("terms")} />
+    <Button theme="primary" onClick={handleSubmit}>Register</Button>
   </VerticalLayout>
 );
 ```
