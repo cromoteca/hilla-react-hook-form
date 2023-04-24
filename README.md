@@ -8,7 +8,7 @@ This project is a POC of integration between Hilla and React Hook Form.
 - Simulate generation of a Yup Schema (a static file which matches what would be generated if we implement that)
 - A customized `useForm` hook, which can be used in place of the one by React Hook Form and simplifies using Vaadin components in forms
 - Propagate server-side error messages to components
-- Checkbox wrapper that supports validation
+- Checkbox wrapper that supports validation, which is also an example of how Vaadin Components can be wrapped to work with React Hook Form
 
 This is how the form looks:
 
@@ -23,6 +23,8 @@ const { register, handleSubmit, formState: { isValid } } = useForm(
 return (
   <VerticalLayout className='p-m'>
     <HorizontalLayout theme="spacing padding">
+      {/* It should be possible to add "required" to the list of parameters set by "register",
+          if Yup can pass the information. */}
       <TextField label="Name" required {...register("name")} />
       <TextField label="Email" required {...register("email")} />
     </HorizontalLayout>
@@ -42,6 +44,8 @@ return (
   </VerticalLayout>
 );
 ```
+
+---
 
 ## Running the application
 

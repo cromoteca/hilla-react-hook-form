@@ -4,10 +4,10 @@ import { Notification } from '@hilla/react-components/Notification.js';
 import { Select } from '@hilla/react-components/Select.js';
 import { TextField } from '@hilla/react-components/TextField.js';
 import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
-import useForm from './HillaFormHook.js';
-import RegistrationInfoSchema from './RegistrationInfoSchema.js';
-import ValidatedCheckbox from './ValidatedCheckbox.js';
 import { RegistrationEndpoint } from 'Frontend/generated/endpoints.js';
+import ValidatedCheckbox from '../../components/checkbox/ValidatedCheckbox.js';
+import useForm from '../../components/form/HillaFormHook.js';
+import RegistrationInfoSchema from '../../tobegenerated/RegistrationInfoSchema.js';
 
 export default function RegistrationView() {
   const countries = [
