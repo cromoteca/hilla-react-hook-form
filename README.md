@@ -22,11 +22,11 @@ const { register, handleSubmit } = useForm(
 
 return (
   <VerticalLayout className='p-m'>
-    <TextField label="Name" {...register("name")} />
-    <TextField label="Email" {...register("email")} />
-    <TextField label="Phone" {...register("phone")} />
-    <Select label="Country" items={countries} {...register("country")} />
-    <ValidatedCheckbox label="I agree to the terms and conditions" {...register("terms")} />
+    <TextField label="Name" {...register(name)} />
+    <TextField label="Email" {...register(email)} />
+    <TextField label="Phone" {...register(phone)} />
+    <Select label="Country" items={countries} {...register(country)} />
+    <ValidatedCheckbox label="I agree to the terms and conditions" {...register(terms)} />
     <Button theme="primary" onClick={handleSubmit}>Register</Button>
   </VerticalLayout>
 );

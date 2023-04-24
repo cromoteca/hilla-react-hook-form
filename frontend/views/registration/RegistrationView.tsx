@@ -7,7 +7,7 @@ import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
 import { RegistrationEndpoint } from 'Frontend/generated/endpoints.js';
 import ValidatedCheckbox from '../../components/checkbox/ValidatedCheckbox.js';
 import useForm from '../../components/form/HillaFormHook.js';
-import RegistrationInfoSchema from '../../tobegenerated/RegistrationInfoSchema.js';
+import { RegistrationInfoSchema, country, email, name, phone, terms } from 'Frontend/tobegenerated/RegistrationInfoSchema.js';
 
 export default function RegistrationView() {
   const countries = [
@@ -26,17 +26,17 @@ export default function RegistrationView() {
   return (
     <VerticalLayout className='p-m'>
       <HorizontalLayout theme="spacing padding">
-        <TextField label="Name" required {...register("name")} />
-        <TextField label="Email" required {...register("email")} />
+        <TextField label="Name" required {...register(name)} />
+        <TextField label="Email" required {...register(email)} />
       </HorizontalLayout>
 
       <HorizontalLayout theme="spacing padding">
-        <TextField label="Phone" {...register("phone")} />
-        <Select label="Country" items={countries} required {...register("country")} />
+        <TextField label="Phone" {...register(phone)} />
+        <Select label="Country" items={countries} required {...register(country)} />
       </HorizontalLayout>
 
       <HorizontalLayout theme="spacing padding">
-        <ValidatedCheckbox label="I agree to the terms and conditions" {...register("terms")} />
+        <ValidatedCheckbox label="I agree to the terms and conditions" {...register(terms)} />
       </HorizontalLayout>
 
       <HorizontalLayout theme="spacing padding">
