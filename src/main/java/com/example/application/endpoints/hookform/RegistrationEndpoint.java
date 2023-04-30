@@ -25,11 +25,24 @@ import org.springframework.lang.Nullable;
 @AnonymousAllowed
 public class RegistrationEndpoint {
 
+  /**
+   * This method is used to handle the registration form.
+   *
+   * <p>It uses the {@link RegistrationInfo} record.
+   */
   @Nonnull
-  public String handle(@Nonnull RegistrationInfo info) {
+  public String handleRegistration(@Nonnull RegistrationInfo info) {
     return "Registration accepted";
   }
 
+  /**
+   * This method is used to pre-validate the registration form.
+   *
+   * <p>It does nothing, as the goal here is to take advantage of the validation which happens before invoking this method.
+   */
+  public void preValidate(@Nonnull RegistrationInfo info) {}
+
+  /** This annotation is used to demonstrate server-side custom validation. */
   @Documented
   @Constraint(validatedBy = NotUsedBeforeValidator.class)
   @Target({ElementType.FIELD})
@@ -42,6 +55,7 @@ public class RegistrationEndpoint {
     Class<? extends Payload>[] payload() default {};
   }
 
+  /** This validator is used to validate that the email or phone number is not already used. */
   public static class NotUsedBeforeValidator implements ConstraintValidator<NotUsedBefore, String> {
     private static final List<String> USED_EMAILS = List.of("john.doe@example.com");
     private static final List<String> USED_PHONES = List.of("0123456789");
@@ -53,11 +67,22 @@ public class RegistrationEndpoint {
     }
   }
 
+  /**
+   * This record is used to validate the registration form.
+   *
+   * <p>It uses the {@link NotUsedBefore} annotation.
+   */
   @Valid
   public static record RegistrationInfo(
-      @NotBlank String name,
-      @NotBlank @Email @NotUsedBefore String email,
-      @Nullable @Pattern(regexp = "^[0-9]*$") @NotUsedBefore String phone,
-      @Size(min = 2, max = 3) String country,
-      @AssertTrue boolean terms) {}
+      @NotBlank(message = "Name is required") String name,
+      @NotBlank(message = "Email is required")
+          @Email(message = "Email must be valid")
+          @NotUsedBefore
+          String email,
+      @Nullable @Pattern(regexp = "^\\+?[0-9]*$", message = "Phone must be valid") @NotUsedBefore
+          String phone,
+      @NotBlank(message = "Country is required")
+          @Size(min = 2, max = 3, message = "Country code must be 2 or 3 characters")
+          String country,
+      @AssertTrue(message = "You must accept the terms and conditions") boolean terms) {}
 }

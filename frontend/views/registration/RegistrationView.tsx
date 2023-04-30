@@ -1,47 +1,45 @@
-import { Button } from '@hilla/react-components/Button.js';
-import { HorizontalLayout } from '@hilla/react-components/HorizontalLayout.js';
-import { Notification } from '@hilla/react-components/Notification.js';
-import { Select } from '@hilla/react-components/Select.js';
-import { TextField } from '@hilla/react-components/TextField.js';
-import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
-import { RegistrationEndpoint } from 'Frontend/generated/endpoints.js';
-import ValidatedCheckbox from '../../components/checkbox/ValidatedCheckbox.js';
-import useForm from '../../components/form/HillaFormHook.js';
-import { RegistrationInfoSchema, country, email, name, phone, terms } from 'Frontend/tobegenerated/RegistrationInfoSchema.js';
+import { Button } from "@hilla/react-components/Button.js";
+import { EmailField } from "@hilla/react-components/EmailField.js";
+import { Notification } from "@hilla/react-components/Notification.js";
+import { Select } from "@hilla/react-components/Select.js";
+import { TextField } from "@hilla/react-components/TextField.js";
+import { VerticalLayout } from "@hilla/react-components/VerticalLayout.js";
+import ValidatedCheckbox from "Frontend/components/checkbox/ValidatedCheckbox.js";
+import useHillaForm from "Frontend/components/form/HillaFormHook.js";
+import RegistrationInfo from "Frontend/generated/com/example/application/endpoints/hookform/RegistrationEndpoint/RegistrationInfo.js";
+import { RegistrationEndpoint } from "Frontend/generated/endpoints.js";
+import { RegistrationInfoResolver } from "Frontend/tobegenerated/RegistrationInfoResolver.js";
 
 export default function RegistrationView() {
-  const countries = [
-    { value: "FI", label: "Finland" },
-    { value: "DE", label: "Germany" },
-    { value: "US", label: "United States" },
-  ];
+    const countries = [
+        { value: "FI", label: "Finland" },
+        { value: "DE", label: "Germany" },
+        { value: "US", label: "United States" },
+    ];
 
-  const { register, handleSubmit, formState: { isValid } } = useForm(
-    RegistrationInfoSchema,
-    RegistrationEndpoint.handle,
-    (message) => Notification.show(message, { theme: 'success' }),
-    (error) => Notification.show(error.message || 'Server error', { theme: 'error' }),
-  );
+    const { field, handleSubmit, validate } = useHillaForm<RegistrationInfo>({
+        mode: 'all',
+        resolver: RegistrationInfoResolver,
+        serverResolver: RegistrationEndpoint.preValidate,
+    });
 
-  return (
-    <VerticalLayout className='p-m'>
-      <HorizontalLayout theme="spacing padding">
-        <TextField label="Name" required {...register(name)} />
-        <TextField label="Email" required {...register(email)} />
-      </HorizontalLayout>
+    const onSubmit = async (data: RegistrationInfo) => {
+        try {
+            const result = await validate(RegistrationEndpoint.handleRegistration(data));
+            result && Notification.show(result, { theme: "success" });
+        } catch (error: any) {
+            Notification.show(error.message, { theme: "error" });
+        }
+    };
 
-      <HorizontalLayout theme="spacing padding">
-        <TextField label="Phone" {...register(phone)} />
-        <Select label="Country" items={countries} required {...register(country)} />
-      </HorizontalLayout>
-
-      <HorizontalLayout theme="spacing padding">
-        <ValidatedCheckbox label="I agree to the terms and conditions" {...register(terms)} />
-      </HorizontalLayout>
-
-      <HorizontalLayout theme="spacing padding">
-        <Button theme="primary" onClick={handleSubmit} disabled={!isValid}>Register</Button>
-      </HorizontalLayout>
-    </VerticalLayout>
-  );
+    return (
+        <VerticalLayout className='p-m'>
+            <TextField label="Name" required {...field("name")} />
+            <EmailField label="Email" required {...field("email")} />
+            <TextField label="Phone" {...field("phone")} />
+            <Select label="Country" required items={countries} {...field("country")} />
+            <ValidatedCheckbox label="I agree to the terms and conditions" {...field("terms")} />
+            <Button theme="primary" onClick={handleSubmit(onSubmit)}>Register</Button>
+        </VerticalLayout>
+    );
 }
