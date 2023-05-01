@@ -48,7 +48,7 @@ public class RegistrationEndpoint {
   @Target({ElementType.FIELD})
   @Retention(RetentionPolicy.RUNTIME)
   public @interface NotUsedBefore {
-    String message() default "Already exists in our database";
+    String message() default "⛔ Already exists in our database";
 
     Class<?>[] groups() default {};
 
@@ -74,15 +74,15 @@ public class RegistrationEndpoint {
    */
   @Valid
   public static record RegistrationInfo(
-      @NotBlank(message = "Name is required") String name,
-      @NotBlank(message = "Email is required")
-          @Email(message = "Email must be valid")
+      @NotBlank(message = "⛔ Name is required") String name,
+      @NotBlank(message = "⛔ Email is required")
+          @Email(message = "⛔ Email must be valid")
           @NotUsedBefore
           String email,
-      @Nullable @Pattern(regexp = "^\\+?[0-9]*$", message = "Phone must be valid") @NotUsedBefore
+      @Nullable @Pattern(regexp = "^\\+?[0-9]*$", message = "⛔ Phone must be valid") @NotUsedBefore
           String phone,
-      @NotBlank(message = "Country is required")
-          @Size(min = 2, max = 3, message = "Country code must be 2 or 3 characters")
+      @NotBlank(message = "⛔ Country is required")
+          @Size(min = 2, max = 3, message = "⛔ Country code must be 2 or 3 characters")
           String country,
-      @AssertTrue(message = "You must accept the terms and conditions") boolean terms) {}
+      @AssertTrue(message = "⛔ You must accept the terms and conditions") boolean terms) {}
 }

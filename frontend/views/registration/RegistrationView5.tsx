@@ -10,7 +10,7 @@ import RegistrationInfo from "Frontend/generated/com/example/application/endpoin
 import { RegistrationEndpoint } from "Frontend/generated/endpoints.js";
 import { RegistrationInfoResolver } from "Frontend/tobegenerated/RegistrationInfoResolver.js";
 
-export default function RegistrationView() {
+export default function RegistrationView5() {
     const countries = [
         { value: "FI", label: "Finland" },
         { value: "DE", label: "Germany" },
@@ -20,7 +20,6 @@ export default function RegistrationView() {
     const { field, handleSubmit, validate } = useHillaForm<RegistrationInfo>({
         mode: 'all',
         resolver: RegistrationInfoResolver,
-        serverResolver: RegistrationEndpoint.preValidate,
     });
 
     const onSubmit = async (data: RegistrationInfo) => {
@@ -34,6 +33,11 @@ export default function RegistrationView() {
 
     return (
         <VerticalLayout className='p-m'>
+            <p>
+                This example wraps the endpoint call with the <code>validate</code> function to
+                associate server-side validation errors with the corresponding fields. Try using the
+                invalid values: "john.doe@example.com" as email and/or "0123456789" as phone number.
+            </p>
             <TextField label="Name" required {...field("name")} />
             <EmailField label="Email" required {...field("email")} />
             <TextField label="Phone" {...field("phone")} />

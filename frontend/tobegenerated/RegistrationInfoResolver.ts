@@ -19,43 +19,43 @@ export const RegistrationInfoResolver: Resolver<RegistrationInfo, any> = async (
     if (!errors.name && !values.name) {
         errors.name = {
             type: 'required',
-            message: 'name is required',
+            message: '⚠️ name is required',
         }
     }
     if (!errors.email && !values.email) {
         errors.email = {
             type: 'required',
-            message: 'email is required',
+            message: '⚠️ email is required',
         }
     }
     if (!errors.email && !isValidEmail(values.email)) {
         errors.email = {
             type: 'invalid',
-            message: 'invalid email',
+            message: '⚠️ invalid email',
         }
     }
     if (!errors.phone && values.phone && !/^\+?[0-9]*$/.test(values.phone)) {
         errors.phone = {
             type: 'invalid',
-            message: 'invalid phone, must be a number',
+            message: '⚠️ invalid phone, must be a number',
         }
     }
     if (!errors.country && !values.country) {
         errors.country = {
             type: 'required',
-            message: 'country is required',
+            message: '⚠️ country is required',
         }
     }
     if (!errors.country && values.country && !/^[A-Z]{2,3}$/.test(values.country)) {
         errors.country = {
             type: 'invalid',
-            message: 'invalid country, must be a 2 or 3 letter country code',
+            message: '⚠️ invalid country, must be a 2 or 3 letter country code',
         }
     }
     if (!errors.terms && !values.terms) {
         errors.terms = {
             type: 'required',
-            message: 'terms must be accepted',
+            message: '⚠️ terms must be accepted',
         }
     }
 
