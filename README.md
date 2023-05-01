@@ -5,30 +5,39 @@ This project is a POC of integration between Hilla and React Hook Form.
 ## Features
 
 - Custom server-side validator
-- Simulate generation of a Yup Schema (a static file which matches what would be generated if we implement that)
-- A customized `useForm` hook, which can be used in place of the one by React Hook Form and simplifies using Vaadin components in forms
-- Propagate server-side error messages to components
+- Simulate generation of a `resolver` (a static file which matches what would be generated if we implement that in Hilla)
+- A customized `useHillaForm` hook, which can be used in place of the one by React Hook Form and simplifies using Vaadin components in forms
+- Propagation of server-side error messages to components
+- Optional real-time server-side validation that can replace the client-side one or, better, complement it.
 - Checkbox wrapper that supports validation, which is also an example of how Vaadin Components can be wrapped to work with React Hook Form
 
-This is how the form looks, assuming that we can avoid adding the `required` attribute manually and get it from Yup:
+This is how the form looks:
 
 ```tsx
-const { register, handleSubmit } = useForm(
-  RegistrationInfoSchema, // generated
-  RegistrationEndpoint.handle, // generated
-  handleSuccessFromServer, // a function to handle endpoint outcome
-  handleErrorFromServer, // a function to handle errors other than validation
-);
+const { field, handleSubmit, validate } = useHillaForm<RegistrationInfo>({
+    mode: 'all',
+    resolver: RegistrationInfoResolver,
+    serverResolver: RegistrationEndpoint.preValidate,
+});
+
+const onSubmit = async (data: RegistrationInfo) => {
+    try {
+        const result = await validate(RegistrationEndpoint.handleRegistration(data));
+        result && Notification.show(result, { theme: "success" });
+    } catch (error: any) {
+        Notification.show(error.message, { theme: "error" });
+    }
+};
 
 return (
-  <VerticalLayout className='p-m'>
-    <TextField label="Name" {...register(name)} />
-    <TextField label="Email" {...register(email)} />
-    <TextField label="Phone" {...register(phone)} />
-    <Select label="Country" items={countries} {...register(country)} />
-    <ValidatedCheckbox label="I agree to the terms and conditions" {...register(terms)} />
-    <Button theme="primary" onClick={handleSubmit}>Register</Button>
-  </VerticalLayout>
+    <VerticalLayout className='p-m'>
+        <TextField label="Name" required {...field("name")} />
+        <EmailField label="Email" required {...field("email")} />
+        <TextField label="Phone" {...field("phone")} />
+        <Select label="Country" required items={countries} {...field("country")} />
+        <ValidatedCheckbox label="I agree to the terms and conditions" {...field("terms")} />
+        <Button theme="primary" onClick={handleSubmit(onSubmit)}>Register</Button>
+    </VerticalLayout>
 );
 ```
 
